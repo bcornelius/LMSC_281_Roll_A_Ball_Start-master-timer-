@@ -9,6 +9,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Player_Controller2 : MonoBehaviour {
 
@@ -17,6 +18,7 @@ public class Player_Controller2 : MonoBehaviour {
 	private int count;
 	public Text countText;
 	public Text winText;
+	float timeRemaining = 30;
 
 	// Use this for initialization
 	void Start () {
@@ -33,6 +35,9 @@ public class Player_Controller2 : MonoBehaviour {
 		Vector3 movement = new Vector3 (moveHorizontal, 0.0f, moveVertical);
 
 		objectRigidbody.AddForce(movement*push);
+
+		// establishes the time
+		timeRemaining -= Time.deltaTime;
 	}
 
 	void OnTriggerEnter (Collider collObject) {
@@ -47,8 +52,19 @@ public class Player_Controller2 : MonoBehaviour {
 		countText.text = "Count: " + count.ToString();
 		if (count >= 15) {
 			winText.text = "You've Won the Game!!!";
+			timeRemaining = 30;
 		}
 	}
 
+	void OnGUI(){
+		if (timeRemaining > 0) {
+			GUI.Label (new Rect (450, 10, 200, 300), "Time Remaining : " + (int)timeRemaining);
 
+
+		} else {
+			if (GUI.Button(new Rect(100, 10, 150, 100), "Restart Level"))
+				SceneManager.LoadScene ("Level2");
+		}
+
+	}
 }
